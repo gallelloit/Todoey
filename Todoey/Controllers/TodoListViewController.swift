@@ -112,21 +112,8 @@ class TodoListViewController: SwipeTableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    //MARK: - Delete Data From Swipe
-    
-    override func updateModel(at indexPath: IndexPath) {
-        if let myItem = self.todoItems?[indexPath.row] {
-            
-            do {
-                try self.realm.write(){
-                    self.realm.delete(myItem)
-                }
-            } catch {
-                print("Error deleting item\(error)")
-            }
-            
-        }
-
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        tableView.reloadData()
     }
     
     //MARK: - Add New Items
@@ -181,6 +168,21 @@ class TodoListViewController: SwipeTableViewController {
         }
         
         self.tableView.reloadData()
+        
+    }
+
+    //Overrides SwipeTableViewController
+    override func updateModel(at indexPath: IndexPath) {
+        if let myItem = self.todoItems?[indexPath.row] {
+            
+            do {
+                try self.realm.write(){
+                    self.realm.delete(myItem)
+                }
+            } catch {
+                print("Error deleting item\(error)")
+            }
+        }
         
     }
     
